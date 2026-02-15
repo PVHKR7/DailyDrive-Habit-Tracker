@@ -777,12 +777,14 @@ body {
   overflow: hidden;
 }
 
-.chart-wrapper-doughnut canvas {
-  display: block;
-  box-sizing: border-box;
-  height: auto;
-  width: 300px;
-  margin: 0 auto;
+.chart-card.wide:has(.chart-wrapper-doughnut) {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+}
+
+.chart-wrapper.chart-wrapper-doughnut {
+  width: 70%;
 }
 
 .chart-wrapper canvas {
