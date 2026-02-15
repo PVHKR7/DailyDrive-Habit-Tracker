@@ -463,10 +463,20 @@ function updateStreak() {
   const today = getTodayDay();
   let streak = 0;
 
-  for (let d = today; d >= 1; d--) {
+  // Check if today is complete
+  const todayKey = dayKey(today);
+  const todayData = appData.days[todayKey] || {};
+  const total = appData.habits.length;
+  const todayDone = appData.habits.filter(h => todayData[h.id] === true).length;
+  const todayComplete = (todayDone === total && total > 0);
+
+  // If today is complete, count from today backwards
+  // If today is NOT complete, count from yesterday backwards (today is still in progress)
+  const startDay = todayComplete ? today : today - 1;
+
+  for (let d = startDay; d >= 1; d--) {
     const key = dayKey(d);
     const dayData = appData.days[key] || {};
-    const total = appData.habits.length;
     const done = appData.habits.filter(h => dayData[h.id] === true).length;
 
     if (done === total && total > 0) {
