@@ -72,6 +72,11 @@
           <button class="btn btn-ghost btn-sm" id="signout-btn">Sign Out</button>
         </div>
       </div>
+      <!-- Mobile streak circle (visible on mobile only) -->
+      <div class="mobile-streak" id="mobile-streak">
+        <span class="mobile-streak-fire">🔥</span>
+        <span class="mobile-streak-count" id="streak-count-header">0</span>
+      </div>
       <!-- Hamburger (visible on mobile only) -->
       <button class="hamburger" id="hamburger-btn" aria-label="Menu">
         <span></span><span></span><span></span>
@@ -89,10 +94,6 @@
         <button class="sidebar-close" id="sidebar-close">&times;</button>
       </div>
       <div class="sidebar-body">
-        <div class="sidebar-streak">
-          <span class="streak-icon">🔥</span>
-          <span id="streak-count-mobile">0</span> day streak
-        </div>
         <button class="btn btn-primary sidebar-btn" id="check-today-btn-mobile">Check Today's Progress</button>
         <div class="sidebar-user" id="user-menu-mobile" style="display:none;">
           <img class="user-avatar" id="user-avatar-mobile" src="" alt="" />

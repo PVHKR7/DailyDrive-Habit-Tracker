@@ -450,8 +450,8 @@ function updateStreak() {
   }
 
   document.getElementById('streak-count').textContent = streak;
-  const mobileStreak = document.getElementById('streak-count-mobile');
-  if (mobileStreak) mobileStreak.textContent = streak;
+  const headerStreak = document.getElementById('streak-count-header');
+  if (headerStreak) headerStreak.textContent = streak;
 }
 
 // ─── CALENDAR ──────────────────────────────────────────
