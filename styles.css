@@ -777,14 +777,9 @@ body {
   overflow: hidden;
 }
 
-.chart-card.wide:has(.chart-wrapper-doughnut) {
-  display: grid;
-  justify-items: center;
-  align-items: center;
-}
-
 .chart-wrapper.chart-wrapper-doughnut {
   width: 70%;
+  margin: 0 auto;
 }
 
 .chart-wrapper canvas {
