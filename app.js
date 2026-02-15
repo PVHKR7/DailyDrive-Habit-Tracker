@@ -473,11 +473,13 @@ function updateStreak() {
   // If today is complete, count from today backwards
   // If today is NOT complete, count from yesterday backwards (today is still in progress)
   const startDay = todayComplete ? today : today - 1;
+  console.log('[Streak] today:', today, 'todayDone:', todayDone + '/' + total, 'todayComplete:', todayComplete, 'startDay:', startDay);
 
   for (let d = startDay; d >= 1; d--) {
     const key = dayKey(d);
     const dayData = appData.days[key] || {};
     const done = appData.habits.filter(h => dayData[h.id] === true).length;
+    console.log('[Streak] day', d, 'key:', key, 'done:', done + '/' + total, 'dayData:', JSON.stringify(dayData));
 
     if (done === total && total > 0) {
       streak++;
