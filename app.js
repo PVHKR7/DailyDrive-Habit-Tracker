@@ -863,7 +863,7 @@ function renderAnalytics() {
       }]
     },
     options: {
-      responsive: true,
+      responsive: false,
       cutout: '65%',
       plugins: {
         legend: {

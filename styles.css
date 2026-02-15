@@ -778,14 +778,9 @@ body {
 }
 
 .chart-wrapper-doughnut {
-  max-width: 300px;
-  max-height: 300px;
-  margin: 0 auto;
-}
-
-.chart-wrapper-doughnut canvas {
-  max-width: 300px !important;
-  max-height: 300px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .chart-wrapper canvas {
