@@ -360,6 +360,8 @@ body {
 
 .tab-content {
   display: none;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .tab-content.active {
@@ -761,6 +763,17 @@ body {
   font-weight: 700;
   margin-bottom: 16px;
   color: var(--text-secondary);
+}
+
+.chart-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.chart-wrapper canvas {
+  max-width: 100%;
+  display: block;
 }
 
 .chart-card.wide {
