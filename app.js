@@ -933,7 +933,7 @@ function initApp() {
   renderToday();
   renderCalendar();
 
-  // Auto-check notification on load
+  // Single notification on load if habits are incomplete
   setTimeout(() => {
     const today = getTodayDay();
     const key = dayKey(today);
@@ -941,12 +941,8 @@ function initApp() {
     const total = appData.habits.length;
     const done = appData.habits.filter(h => dayData[h.id]).length;
 
-    if (done < total && done > 0) {
-      showToast('info', `${total - done} habit(s) remaining today!`,
-        'Don\'t forget to complete your remaining habits. You\'ve got this! 💪', 7000);
-    } else if (done === 0 && total > 0) {
-      showToast('warning', 'No habits completed yet! 😤',
-        'The day isn\'t over yet — but it will be soon. Get moving! Every habit matters!', 8000);
+    if (done < total && total > 0) {
+      showToast('warning', `😤 Amma is ANGRY!`, getRandomAngryMessage(), 10000);
     }
   }, 1500);
 
