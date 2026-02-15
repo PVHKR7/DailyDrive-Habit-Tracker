@@ -95,7 +95,6 @@ body {
   border: none;
   cursor: pointer;
   padding: 6px;
-  margin-left: auto;
 }
 
 .hamburger span {
@@ -117,23 +116,16 @@ body {
   transform: rotate(-45deg) translate(5px, -5px);
 }
 
-/* ---- Mobile streak circle (hidden on desktop) ---- */
+/* ---- Mobile streak (hidden on desktop) ---- */
 .mobile-streak {
   display: none;
   align-items: center;
-  justify-content: center;
-  gap: 2px;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--warning-bg);
-  border: 2px solid rgba(245, 158, 11, 0.35);
-  flex-direction: column;
+  gap: 4px;
   flex-shrink: 0;
 }
 
 .mobile-streak-fire {
-  font-size: 0.7rem;
+  font-size: 0.95rem;
   line-height: 1;
 }
 
@@ -1052,7 +1044,7 @@ body {
 
 @media (max-width: 768px) {
   /* Show hamburger + mobile streak, hide desktop actions */
-  .hamburger { display: flex; }
+  .hamburger { display: flex; margin-left: 0; }
   .mobile-streak { display: flex; margin-left: auto; }
   .desktop-actions { display: none !important; }
   .subtitle { display: none; }
