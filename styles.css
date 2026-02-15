@@ -1172,9 +1172,7 @@ body {
     font-size: 0.8rem;
   }
   .chart-card canvas {
-    max-height: 220px;
     width: 100% !important;
-    height: auto !important;
   }
   .settings-panel {
     padding: 20px 16px;

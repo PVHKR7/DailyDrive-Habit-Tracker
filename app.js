@@ -804,6 +804,11 @@ function renderAnalytics() {
     p >= 80 ? '#22c55e' : p >= 50 ? '#7c5cff' : p >= 25 ? '#f59e0b' : '#ef4444'
   );
 
+  // Set minimum height for horizontal bar chart based on number of habits
+  const habitsCanvas = document.getElementById('chart-habits');
+  const minBarHeight = habits.length * 40 + 40;
+  habitsCanvas.parentElement.style.minHeight = minBarHeight + 'px';
+
   chartHabits = new Chart(ctxHabits, {
     type: 'bar',
     data: {
@@ -813,12 +818,13 @@ function renderAnalytics() {
         data: habitPercentages,
         backgroundColor: barColors,
         borderRadius: 6,
-        barThickness: 28,
+        barThickness: 24,
       }]
     },
     options: {
       indexAxis: 'y',
       responsive: true,
+      maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
         tooltip: {
