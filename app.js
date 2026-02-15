@@ -72,25 +72,32 @@ function showApp() {
 }
 
 // ─── SIDEBAR (Mobile Hamburger Menu) ──────────────────
+const $sidebar = document.getElementById('sidebar');
+const $overlay = document.getElementById('sidebar-overlay');
+const $hamburger = document.getElementById('hamburger-btn');
+const $sidebarClose = document.getElementById('sidebar-close');
+
 function openSidebar() {
-  document.getElementById('sidebar').classList.add('open');
-  document.getElementById('sidebar-overlay').classList.add('show');
-  document.getElementById('hamburger-btn').classList.add('open');
+  if ($sidebar) $sidebar.classList.add('open');
+  if ($overlay) $overlay.classList.add('show');
+  if ($hamburger) $hamburger.classList.add('open');
+  document.body.style.overflow = 'hidden'; // prevent background scroll
 }
 
 function closeSidebar() {
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('sidebar-overlay').classList.remove('show');
-  document.getElementById('hamburger-btn').classList.remove('open');
+  if ($sidebar) $sidebar.classList.remove('open');
+  if ($overlay) $overlay.classList.remove('show');
+  if ($hamburger) $hamburger.classList.remove('open');
+  document.body.style.overflow = '';
 }
 
-document.getElementById('hamburger-btn').addEventListener('click', () => {
-  const sidebar = document.getElementById('sidebar');
-  sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
-});
-
-document.getElementById('sidebar-close').addEventListener('click', closeSidebar);
-document.getElementById('sidebar-overlay').addEventListener('click', closeSidebar);
+if ($hamburger) {
+  $hamburger.addEventListener('click', () => {
+    $sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
+  });
+}
+if ($sidebarClose) $sidebarClose.addEventListener('click', closeSidebar);
+if ($overlay) $overlay.addEventListener('click', closeSidebar);
 
 // Google Sign-In
 document.getElementById('google-signin-btn').addEventListener('click', async () => {
