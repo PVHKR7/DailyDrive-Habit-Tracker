@@ -863,7 +863,8 @@ function renderAnalytics() {
       }]
     },
     options: {
-      responsive: false,
+      responsive: true,
+      maintainAspectRatio: true,
       cutout: '65%',
       plugins: {
         legend: {

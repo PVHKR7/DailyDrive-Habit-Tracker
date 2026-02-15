@@ -777,10 +777,12 @@ body {
   overflow: hidden;
 }
 
-.chart-wrapper-doughnut {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.chart-wrapper-doughnut canvas {
+  display: block;
+  box-sizing: border-box;
+  height: auto;
+  width: 300px;
+  margin: 0 auto;
 }
 
 .chart-wrapper canvas {
