@@ -1048,13 +1048,12 @@ body {
   .mobile-streak { display: flex; }
   .desktop-actions { display: none !important; }
   .subtitle { display: none; }
-  .header { justify-content: flex-end; }
-  .header .logo { margin-right: auto; }
 
   .header {
     padding: 10px 14px;
-    gap: 8px;
+    gap: 12px;
   }
+  .header .logo { margin-right: auto; }
   .logo h1 {
     font-size: 1.15rem;
   }
