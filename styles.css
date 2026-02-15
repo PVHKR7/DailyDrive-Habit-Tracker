@@ -84,17 +84,14 @@ body {
 }
 
 .logo-img {
-  width: 32px;
-  height: 32px;
-  border-radius: 7px;
+  width: 28px;
+  height: 28px;
   flex-shrink: 0;
 }
 
 .logo-img-lg {
-  width: 80px;
-  height: 80px;
-  max-width: 80px;
-  border-radius: 18px;
+  width: 48px;
+  height: 48px;
   flex-shrink: 0;
 }
 
@@ -956,18 +953,15 @@ body {
 
 .auth-logo {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 14px;
+  gap: 10px;
   margin-bottom: 16px;
 }
 
 .auth-logo .logo-img-lg {
-  width: 80px;
-  height: 80px;
-  max-width: 80px;
-  border-radius: 18px;
+  width: 48px;
+  height: 48px;
 }
 
 .auth-logo .logo-icon {
