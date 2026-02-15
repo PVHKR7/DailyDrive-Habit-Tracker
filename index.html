@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DailyDrive — Monthly Habit Tracker</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#7c5cff" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="DailyDrive" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+
+  <!-- Styles & Fonts -->
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- Firebase SDKs (compat for simplicity) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <!-- Notification Toast Container -->
+  <div id="toast-container"></div>
+
+  <!-- ============ AUTH SCREEN ============ -->
+  <div id="auth-screen" class="auth-screen">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <span class="logo-icon">⚡</span>
+        <h1>DailyDrive</h1>
+      </div>
+      <p class="auth-subtitle" id="auth-subtitle">Monthly Habit Tracker</p>
+      <p class="auth-desc">Sign in to sync your habits across all your devices.</p>
+      <button class="btn btn-google" id="google-signin-btn">
+        <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59A14.5 14.5 0 0 1 9.5 24c0-1.59.28-3.14.76-4.59l-7.98-6.19A23.99 23.99 0 0 0 0 24c0 3.77.87 7.36 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        Sign in with Google
+      </button>
+      <button class="btn btn-ghost" id="offline-btn">Continue Offline (local only)</button>
+      <p class="auth-note">Offline mode saves data only on this device. Sign in to sync everywhere.</p>
+    </div>
+  </div>
+
+  <!-- ============ MAIN APP (hidden until auth) ============ -->
+  <div id="app-wrapper" style="display:none;">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="header-left">
+        <div class="logo">
+          <span class="logo-icon">⚡</span>
+          <h1>DailyDrive</h1>
+        </div>
+        <span class="subtitle" id="header-subtitle">Monthly Habit Tracker</span>
+      </div>
+      <div class="header-right">
+        <div class="streak-badge" id="streak-badge">
+          <span class="streak-icon">🔥</span>
+          <span id="streak-count">0</span> day streak
+        </div>
+        <button class="btn btn-primary" id="check-today-btn">Check Today's Progress</button>
+        <div class="user-menu" id="user-menu" style="display:none;">
+          <img class="user-avatar" id="user-avatar" src="" alt="" />
+          <button class="btn btn-ghost btn-sm" id="signout-btn">Sign Out</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="tabs">
+      <button class="tab active" data-tab="tracker">📋 Habit Tracker</button>
+      <button class="tab" data-tab="analytics">📊 Analytics & Insights</button>
+      <button class="tab" data-tab="settings">⚙️ Manage Habits</button>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+
+      <!-- ============ TRACKER TAB ============ -->
+      <section id="tracker-tab" class="tab-content active">
+        <!-- Sync Status -->
+        <div class="sync-banner" id="sync-banner" style="display:none;">
+          <span id="sync-status-text">Syncing...</span>
+        </div>
+
+        <!-- Today's Summary Card -->
+        <div class="today-card">
+          <div class="today-header">
+            <h2 id="today-date"></h2>
+            <div class="today-progress-ring">
+              <svg viewBox="0 0 100 100">
+                <circle class="ring-bg" cx="50" cy="50" r="42" />
+                <circle class="ring-fill" id="today-ring" cx="50" cy="50" r="42" />
+              </svg>
+              <span class="ring-text" id="today-percent">0%</span>
+            </div>
+          </div>
+          <div class="today-habits" id="today-habits"></div>
+        </div>
+
+        <!-- Calendar Grid -->
+        <div class="calendar-section">
+          <h2 class="section-title" id="calendar-title">Daily Overview</h2>
+          <div class="calendar-legend">
+            <span class="legend-item"><span class="legend-dot legend-complete"></span> All Done</span>
+            <span class="legend-item"><span class="legend-dot legend-partial"></span> Partial</span>
+            <span class="legend-item"><span class="legend-dot legend-missed"></span> Missed</span>
+            <span class="legend-item"><span class="legend-dot legend-future"></span> Upcoming</span>
+          </div>
+          <div class="calendar-grid" id="calendar-grid"></div>
+        </div>
+
+        <!-- Day Detail Modal -->
+        <div class="modal-overlay" id="day-modal">
+          <div class="modal">
+            <div class="modal-header">
+              <h3 id="modal-date"></h3>
+              <button class="modal-close" id="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ ANALYTICS TAB ============ -->
+      <section id="analytics-tab" class="tab-content">
+        <div class="analytics-grid">
+          <div class="stat-card">
+            <div class="stat-icon">✅</div>
+            <div class="stat-value" id="stat-completion">0%</div>
+            <div class="stat-label">Overall Completion</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">🏆</div>
+            <div class="stat-value" id="stat-best-habit">—</div>
+            <div class="stat-label">Most Consistent Habit</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">😤</div>
+            <div class="stat-value" id="stat-worst-habit">—</div>
+            <div class="stat-label">Needs Most Work</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">📅</div>
+            <div class="stat-value" id="stat-perfect-days">0</div>
+            <div class="stat-label">Perfect Days</div>
+          </div>
+
+          <div class="chart-card wide">
+            <h3 id="chart-daily-title">Daily Completion Rate</h3>
+            <canvas id="chart-daily"></canvas>
+          </div>
+
+          <div class="chart-card wide">
+            <h3>Habit Completion Breakdown</h3>
+            <canvas id="chart-habits"></canvas>
+          </div>
+
+          <div class="chart-card">
+            <h3>Overall Status</h3>
+            <canvas id="chart-doughnut"></canvas>
+          </div>
+
+          <div class="chart-card">
+            <h3>Consistency Heatmap</h3>
+            <div class="heatmap" id="heatmap"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ SETTINGS TAB ============ -->
+      <section id="settings-tab" class="tab-content">
+        <div class="settings-panel">
+          <h2>Manage Your Habits</h2>
+          <p class="settings-desc">Add, edit, or remove habits. Changes apply to all days going forward.</p>
+          <div class="habit-list-settings" id="habit-list-settings"></div>
+          <div class="add-habit-form">
+            <input type="text" id="new-habit-input" placeholder="Enter a new habit..." maxlength="50" />
+            <select id="new-habit-icon">
+              <option value="💧">💧 Water</option>
+              <option value="🏋️">🏋️ Exercise</option>
+              <option value="📖">📖 Reading</option>
+              <option value="🧘">🧘 Meditation</option>
+              <option value="🥗">🥗 Healthy Eating</option>
+              <option value="😴">😴 Sleep</option>
+              <option value="📝">📝 Journal</option>
+              <option value="🚶">🚶 Walk</option>
+              <option value="🎯">🎯 Focus</option>
+              <option value="💊">💊 Vitamins</option>
+              <option value="🧹">🧹 Cleaning</option>
+              <option value="📵">📵 No Phone</option>
+              <option value="🌅">🌅 Wake Early</option>
+              <option value="🤝">🤝 Connect</option>
+              <option value="⭐">⭐ Other</option>
+            </select>
+            <button class="btn btn-primary" id="add-habit-btn">+ Add Habit</button>
+          </div>
+          <div class="settings-actions">
+            <button class="btn btn-danger" id="reset-all-btn">🗑️ Reset All Data</button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="footer">
+      <p>DailyDrive — Built to keep you accountable. No excuses. 💪</p>
+    </footer>
+
+  </div><!-- /app-wrapper -->
+
+  <script src="firebase-config.js"></script>
+  <script src="app.js"></script>
+
+  <!-- Register Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(reg => console.log('SW registered:', reg.scope))
+          .catch(err => console.log('SW registration failed:', err));
+      });
+    }
+  </script>
+</body>
+</html>
